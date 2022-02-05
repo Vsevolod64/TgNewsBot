@@ -14,9 +14,13 @@ StreamWriter SaveLinkInFile; // сохранение в файл ссылки
 StreamWriter logger; // логгер
 StreamReader readfile; // чтение из файла 
 
+Bot bot = new();
+bot.init();
+bot.SendNews("https://telegra.ph/123-02-05-30", "https://s.061.ua/img/section/newsInternalIcon/is/2/17678229013777457825891101803839262421307151n_61fe974427856.jpg","Some News",true);
 
 while (true)
 {
+    
     doc = web.Load("https://www.061.ua/"); // обновляем сайт 
 
     foreach (HtmlNode node in doc.DocumentNode.SelectNodes("//div[contains(@class, 'news-feed')]//a[@href]")) // получение ссылки на последнюю новость
@@ -43,6 +47,7 @@ while (true)
 
         SaveLinkInFile.Close();
     }
+
 
 
     for (int i = 0; i <= 6; i++) // перерыв - минута
