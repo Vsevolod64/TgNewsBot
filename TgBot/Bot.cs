@@ -16,21 +16,11 @@ namespace ZpNewsBot
             cancellationToken = new CancellationTokenSource();
         }
 
-        async void sendMsg(string photourl, string title, string telegraphLink)
+        public async void sendMsg(string photourl, string title, string telegraphLink)
         {
             Message message = await botClient.SendPhotoAsync(
             chatId: -1001549217373,
             photo: $"{photourl}",
-            caption: $"<a href=\"{telegraphLink}\">{title}</a>",
-            parseMode: ParseMode.Html,
-            cancellationToken: cancellationToken.Token);
-        }
-
-        async void sendMsg(string title, string telegraphLink)
-        {
-            Message message = await botClient.SendPhotoAsync(
-            chatId: -1001549217373,
-            photo: null,
             caption: $"<a href=\"{telegraphLink}\">{title}</a>",
             parseMode: ParseMode.Html,
             cancellationToken: cancellationToken.Token);

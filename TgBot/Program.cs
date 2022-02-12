@@ -9,14 +9,14 @@ string title = ""; // название статьи
 PageNode pageNode = new PageNode();
 
 bool isHaveImg = false; // имеется ли картинка на сайте
+string UrlToImg = "";
 
 StreamWriter SaveLinkInFile; // сохранение в файл ссылки
 StreamWriter logger; // логгер
 StreamReader readfile; // чтение из файла 
 
-Bot bot = new();
-bot.init();
-bot.SendNews("https://telegra.ph/123-02-05-30", "https://s.061.ua/img/section/newsInternalIcon/is/2/17678229013777457825891101803839262421307151n_61fe974427856.jpg","Some News",true);
+Bot bot = new Bot();
+
 
 while (true)
 {
@@ -26,6 +26,7 @@ while (true)
     foreach (HtmlNode node in doc.DocumentNode.SelectNodes("//div[contains(@class, 'news-feed')]//a[@href]")) // получение ссылки на последнюю новость
     {
         LinkInLastNews = "https://www.061.ua/" + node.GetAttributeValue("href", null);
+        break;
     }
 
     readfile = new StreamReader("links.txt");
@@ -37,6 +38,16 @@ while (true)
         string TelegraphLink = ParseNews(); // получение ссылки на телеграф статью
         logger.WriteLine("NEW NEWS|" + DateTime.Now.ToString() + "|LINK: " + TelegraphLink); // запись новой новости в логгер
 
+        if (!isHaveImg) // рассылка
+        {
+            bot.sendMsg("https://static8.depositphotos.com/1338574/829/i/600/depositphotos_8292496-stock-photo-news.jpg", title, TelegraphLink);
+            Console.WriteLine("Send without img!");
+        }
+        else
+        {
+            bot.sendMsg(UrlToImg, title, TelegraphLink);
+            Console.WriteLine("Send with img!");
+        }
 
         logger.Close();
         readfile.Close();
@@ -105,13 +116,14 @@ string ParseNews()
 
     CreatePage request = new();
 
-    //bool withPicture = false;
-
-    //if (UrlToImage() != null)
-    //{
-    //    pageNode.attrs = UrlToImage();
-    //    withPicture = true;
-    //}
+    
+    isHaveImg = false;
+    UrlToImg = null;
+    if (UrlToImage() != null)
+    {
+        UrlToImg = UrlToImage();
+        isHaveImg = true;
+    }
 
     string result = request.CreatePageFunc(pageNode, title);
 
