@@ -72,6 +72,7 @@ string ParseNews()
     List<string> words = new(); // контент статьи
     doc = web.Load(LinkInLastNews);
 
+    title = "";
     foreach (HtmlNode node in doc.DocumentNode.SelectNodes("//div[@class='article-details__title-container']//h1")) // заголовок
     {
         title += node.InnerText;
